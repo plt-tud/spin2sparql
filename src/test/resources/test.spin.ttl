@@ -1,0 +1,12 @@
+[ a                              <http://spinrdf.org/sp#Select> ;
+  <http://spinrdf.org/sp#where>  ( [ <http://spinrdf.org/sp#object>  [ <http://spinrdf.org/sp#varName>
+                                                       "o"^^<http://www.w3.org/2001/XMLSchema#string> ] ;
+                                     <http://spinrdf.org/sp#predicate>
+                                             [ <http://spinrdf.org/sp#varName>
+                                                       "p"^^<http://www.w3.org/2001/XMLSchema#string> ] ;
+                                     <http://spinrdf.org/sp#subject>
+                                             [ <http://spinrdf.org/sp#varName>
+                                                       "s"^^<http://www.w3.org/2001/XMLSchema#string> ]
+                                   ] )
+] .
+ 

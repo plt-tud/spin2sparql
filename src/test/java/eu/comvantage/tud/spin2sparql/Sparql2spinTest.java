@@ -2,6 +2,7 @@ package eu.comvantage.tud.spin2sparql;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URL;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -53,10 +54,11 @@ public class Sparql2spinTest
         assertTrue(true);
     }
     
-    public void testSpin2Sparl() throws FileNotFoundException
+    public void testSpin2Sparql() throws FileNotFoundException
     {
     	Sparql2spin s2s = new Sparql2spin();
-    	File inputFile = new File("/home/mgraube/Dokumente/Projekte/Graph Transformation/Linked Data Approach/Class-Table (Königs, 2005)/rules/declarative/01_Class2Table.rq.spin.ttl");
+    	URL resourceUrl = getClass().getResource("/test.spin.ttl");
+    	File inputFile = new File(resourceUrl.getFile());
 		s2s.convertSpin2Sparql(inputFile );
 		assert(true);
     }

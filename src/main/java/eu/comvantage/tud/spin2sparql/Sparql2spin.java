@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.atlas.io.IndentedWriter;
 import org.topbraid.spin.arq.ARQ2SPIN;
 import org.topbraid.spin.arq.ARQFactory;
@@ -58,10 +59,11 @@ public class Sparql2spin {
 								+ fileName + "!");
 				System.exit(0);
 			}
+			String ext = FilenameUtils.getExtension(inputFile.getName());
 	
-			if (inputFile.getName().toLowerCase().endsWith(".rq"))
+			if (ext.equals("rq"))
 				s.convertSparql2Spin(inputFile);
-			else if (inputFile.getName().toLowerCase().endsWith(".ttl"))
+			else if (ext.equals("n3") || ext.equals("ttl"))
 				s.convertSpin2Sparql(inputFile);
 		}
 

@@ -43,16 +43,12 @@ public class Sparql2spinTest
     public void testConvert()
     {
     	Sparql2spin s2s = new Sparql2spin();
-    	s2s.convert("SELECT * WHERE {?s ?p ?o}");
+    	URL resourceUrl = getClass().getResource("/test.rq");
+    	File inputFile = new File(resourceUrl.getFile());
+    	s2s.convertSparql2Spin(inputFile);
     	assertTrue(true);
     }
     
-    public void testConvertUpdate()
-    {
-        Sparql2spin s2s = new Sparql2spin();
-        s2s.convert("INSERT {?p ?s ?o} * WHERE {?s ?p ?o}");
-        assertTrue(true);
-    }
     
     public void testSpin2Sparql() throws FileNotFoundException
     {

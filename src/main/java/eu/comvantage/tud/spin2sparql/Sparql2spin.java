@@ -48,32 +48,19 @@ public class Sparql2spin {
 			System.exit(0);
 		}
 
+		Sparql2spin s = new Sparql2spin();
 		for (String fileName : jci.inputFileName) {
 			File inputFile = new File(fileName);
 
 			if (!inputFile.canRead() || !inputFile.isFile()) {
 				System.err
-						.println("Wrong input file: There was no .rq-file found at "
+						.println("Wrong input file: There was no file found at "
 								+ fileName + "!");
 				System.exit(0);
 			}
-
-			StringBuffer buff = new StringBuffer();
-			try {
-				FileReader fr = new FileReader(inputFile);
-				int c;
-				while ((c = fr.read()) != -1) {
-					buff.append((char) c);
-				}
-				fr.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-				System.exit(0);
-			}
-			String query = buff.toString();
-			Sparql2spin s = new Sparql2spin();
+	
 			if (inputFile.getName().toLowerCase().endsWith(".rq"))
-				s.convert(query);
+				s.convertSparql2Spin(inputFile);
 			else if (inputFile.getName().toLowerCase().endsWith(".ttl"))
 				s.convertSpin2Sparql(inputFile);
 		}
@@ -101,7 +88,21 @@ public class Sparql2spin {
 		}
 	}
 
-	public void convert(String sparqlQuery) {
+	public void convertSparql2Spin(File inputFile) {
+		StringBuffer buff = new StringBuffer();
+		try {
+			FileReader fr = new FileReader(inputFile);
+			int c;
+			while ((c = fr.read()) != -1) {
+				buff.append((char) c);
+			}
+			fr.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+		String sparqlQuery = buff.toString();
+		
 		Model model = ModelFactory.createDefaultModel();
 		try {
 			ARQ2SPIN.parseUpdate(sparqlQuery, model);

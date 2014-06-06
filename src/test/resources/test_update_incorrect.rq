@@ -5,20 +5,12 @@ PREFIX c: <http://comvantage.eu/graph-trans/correspondence#>
 # create table for each persistent class
 # declarative 
 
-SELECT *
+INSERT {
+	GRAPH <graph://test> {
+		?t a :Test.
+	}
 WHERE {
     GRAPH <graph://correspondence> {
-        [] c:c _:c, _:t;
+        [] c:c ?c, ?t;
             c:columnPrefix "".
-    }
-    GRAPH <graph://table> {
-        _:t  a tm:Table;
-            tm:name ?name.
-    }
-    GRAPH <graph://class> {
-        _:c a cm:Class;
-            cm:name ?name;
-            cm:is_persistent true.
-    }
-    MINUS { }
 }

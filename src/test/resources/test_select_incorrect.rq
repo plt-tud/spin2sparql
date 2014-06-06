@@ -1,0 +1,24 @@
+PREFIX cm: <http://comvantage.eu/graph-trans/class/m#>
+PREFIX tm: <http://comvantage.eu/graph-trans/table/m#>
+PREFIX c: <http://comvantage.eu/graph-trans/correspondence#>
+
+# create table for each persistent class
+# declarative 
+
+SELECT *
+WHERE {
+    GRAPH <graph://correspondence> {
+        [] c:c ?c, ?t;
+            c:columnPrefix "".
+    }
+    GRAPH <graph://table> {
+        ?t  a tm:Table;
+            tm:name ?name.
+    }
+    GRAPH <graph://class> {
+        c a cm:Class;
+            cm:name ?name;
+            cm:is_persistent true.
+    }
+    MINUS {}
+}

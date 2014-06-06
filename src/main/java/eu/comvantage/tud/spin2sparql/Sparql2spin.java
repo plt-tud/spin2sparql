@@ -21,6 +21,7 @@ import org.topbraid.spin.vocabulary.SP;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
+import com.hp.hpl.jena.query.QueryParseException;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -90,7 +91,7 @@ public class Sparql2spin {
 		}
 	}
 
-	public void convertSparql2Spin(File inputFile) {
+	public void convertSparql2Spin(File inputFile) throws QueryParseException {
 		StringBuffer buff = new StringBuffer();
 		try {
 			FileReader fr = new FileReader(inputFile);
@@ -106,14 +107,29 @@ public class Sparql2spin {
 		String sparqlQuery = buff.toString();
 		
 		Model model = ModelFactory.createDefaultModel();
+		QueryParseException e_update = null;
+		QueryParseException e_query = null;
 		try {
 			ARQ2SPIN.parseUpdate(sparqlQuery, model);
-		} catch (Exception e) {
+		} catch (QueryParseException e) {
+			e_update = e;
 		}
 		try {
 			ARQ2SPIN.parseQuery(sparqlQuery, model);
-		} catch (Exception e) {
+		} catch (QueryParseException e) {
+			e_query = e;
 		}
-		model.write(System.out, FileUtils.langTurtle);
+		if ((e_update!=null) && (e_query!=null) ){
+			System.err.println("Error in Query:");
+			System.err.println(e_update.getMessage());
+			System.err.println(e_query.getMessage());
+			if (e_update.getMessage().startsWith("Encountered \" \"select\""))
+				throw e_query;
+			else
+				throw e_update;
+		}
+		else{
+			model.write(System.out, FileUtils.langTurtle);
+		}
 	}
 }

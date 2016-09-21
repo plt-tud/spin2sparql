@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2013 Markus Graube (TUD)
+ * Copyright (c) 2016 Markus Graube (TUD)
  * All rights reserved. 
  *******************************************************************************/
-package eu.comvantage.tud.spin2sparql;
+package de.tud.plt.spin2sparql;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,8 +10,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.atlas.io.IndentedWriter;
+import org.apache.jena.query.QueryParseException;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.util.FileUtils;
+import org.apache.jena.vocabulary.RDF;
 import org.topbraid.spin.arq.ARQ2SPIN;
 import org.topbraid.spin.arq.ARQFactory;
 import org.topbraid.spin.model.SPINFactory;
@@ -19,57 +25,7 @@ import org.topbraid.spin.model.update.Update;
 import org.topbraid.spin.system.SPINModuleRegistry;
 import org.topbraid.spin.vocabulary.SP;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.ParameterException;
-import com.hp.hpl.jena.query.QueryParseException;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.util.FileUtils;
-import com.hp.hpl.jena.vocabulary.RDF;
-
-/**
- * Converts between textual SPARQL representation and SPIN RDF model.
- * 
- * @author Markus Graube
- */
-public class Sparql2spin {
-
-	public static void main(String[] args) throws FileNotFoundException {
-
-		// command-line-parser: JCommander-1.29
-		JCommanderImpl jci = new JCommanderImpl();
-		JCommander jc = new JCommander(jci);
-
-		// wrong input => display usage
-		try {
-			jc.parse(args);
-		} catch (ParameterException e) {
-			System.err.println(e.toString());
-			System.exit(0);
-		}
-
-		Sparql2spin s = new Sparql2spin();
-		for (String fileName : jci.inputFileName) {
-			File inputFile = new File(fileName);
-
-			if (!inputFile.canRead() || !inputFile.isFile()) {
-				System.err
-						.println("Wrong input file: There was no file found at "
-								+ fileName + "!");
-				System.exit(0);
-			}
-			String ext = FilenameUtils.getExtension(inputFile.getName());
-	
-			if (ext.equals("rq"))
-				s.convertSparql2Spin(inputFile);
-			else if (ext.equals("n3") || ext.equals("ttl"))
-				s.convertSpin2Sparql(inputFile);
-		}
-
-	}
-
+public class Converter {
 	public void convertSpin2Sparql(File inputFile) throws FileNotFoundException {
 		SPINModuleRegistry.get().init();
 		FileInputStream fis = new FileInputStream(inputFile);

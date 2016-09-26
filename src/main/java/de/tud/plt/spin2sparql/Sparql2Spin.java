@@ -30,7 +30,7 @@ public class Sparql2Spin {
 
 		// command-line-parser: JCommander-1.29
 		Sparql2Spin jci = new Sparql2Spin();
-		JCommander jc = new JCommander(jci, args);
+		JCommander jc = new JCommander(jci);
 
 		// wrong input => display usage
 		try {
@@ -53,7 +53,7 @@ public class Sparql2Spin {
 			if (!inputFile.canRead() || !inputFile.isFile()) {
 				System.err
 						.println("Wrong input file: There was no file found at "
-								+ fileName + "!");
+								+ jci.inputFileName + "!");
 				System.exit(0);
 			}
 		

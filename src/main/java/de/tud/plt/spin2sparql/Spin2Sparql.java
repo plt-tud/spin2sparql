@@ -29,7 +29,7 @@ public class Spin2Sparql {
 
 		// command-line-parser: JCommander-1.29
 		Spin2Sparql jci = new Spin2Sparql();
-		JCommander jc = new JCommander(jci, args);
+		JCommander jc = new JCommander(jci);
 
 		// wrong input => display usage
 		try {
